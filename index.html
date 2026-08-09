@@ -393,13 +393,15 @@
 <body>
     <div class="bg-pattern"></div>
 
-   <header>
-    <div class="logos" title="Logo Asrama USK">
-        <img src="/assets/logo-usk.jpg"
-             alt="Logo Asrama USK">
+ <header>
+    <div class="logos" title="Logo USK, UPT Asrama, dan Pembinaan Karakter Asrama">
+        <img src="./logo-usk.jpg"
+             alt="Logo USK, UPT Asrama, dan Pembinaan Karakter Asrama">
     </div>
 
-    <div class="hamburger" onclick="openModal('login-modal')" title="Login Admin">
+    <div class="hamburger"
+         onclick="openModal('login-modal')"
+         title="Login Admin">
         <div class="line line-top"></div>
         <div class="line line-mid"></div>
         <div class="line line-bot"></div>
@@ -606,7 +608,14 @@
         import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'asrama-usk-app';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { projectId: "dummy-project" };
+        const firebaseConfig = {
+            apiKey: "AIzaSyCj3o34FKA91EGtWfZfwE2BwpseNEIuw8A",
+            authDomain: "pkusk-4edfd.firebaseapp.com",
+            projectId: "pkusk-4edfd",
+            storageBucket: "pkusk-4edfd.firebasestorage.app",
+            messagingSenderId: "502364101817",
+            appId: "1:502364101817:web:519de43a32f58add6c4f68"
+        };
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
         let db;
