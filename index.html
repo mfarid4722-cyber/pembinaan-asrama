@@ -638,7 +638,14 @@
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'asrama-usk-app';
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { projectId: "dummy-project" };
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
+const firebaseConfig = {
+  apiKey: "AIzaSyAN6Gs9cFhUG5c7f0g4TUfZTXTraeosvvo",
+  authDomain: "wwsk-164ef.firebaseapp.com",
+  projectId: "wwsk-164ef",
+  storageBucket: "wwsk-164ef.firebasestorage.app",
+  messagingSenderId: "954226750946",
+  appId: "1:954226750946:web:1bae705e510f75eddcf5bb"
+};
         let db;
         let auth;
         let isFirebaseReady = false;
