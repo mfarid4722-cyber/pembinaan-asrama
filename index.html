@@ -972,6 +972,30 @@
                 });
                 html += `</div>`;
             }
+            else if (menuName === 'Jadwal Kultum') {
+                html += `<div class="content-list">`;
+                // Urutkan berdasarkan tanggal jika memungkinkan
+                const sortedKultum = [...filteredData].sort((a,b) => new Date(a.tanggal) - new Date(b.tanggal));
+                sortedKultum.forEach(item => {
+                    html += `<div class="content-item">
+                                <h4 style="color:#00e5ff;">📅 ${item.tanggal || '-'}</h4>
+                                <p><strong>Penceramah:</strong> ${item.nama}</p>
+                                <p><strong>Tema:</strong> ${item.tema || 'Bebas'}</p>
+                             </div>`;
+                });
+                html += `</div>`;
+            }
+            else if (menuName === 'Laporan Kehadiran') {
+                html += `<div class="user-table-container"><table class="user-table">
+                            <thead><tr><th style="text-align:left;">Nama</th><th style="text-align:left;">Prodi</th><th style="text-align:center;">Bulan</th><th style="text-align:center;" title="Sakit">S</th><th style="text-align:center;" title="Izin">I</th><th style="text-align:center;" title="Alfa">A</th></tr></thead><tbody>`;
+                filteredData.forEach(item => { 
+                    html += `<tr><td>${item.nama}</td><td>${item.prodi || '-'}</td><td style="text-align:center;">${item.bulan}</td>
+                             <td style="text-align:center;">${item.sakit || 0}</td>
+                             <td style="text-align:center;">${item.izin || 0}</td>
+                             <td style="text-align:center; color:#ff5252; font-weight:bold;">${item.alfa || 0}</td></tr>`; 
+                });
+                html += `</tbody></table></div>`;
+            }
             else if (menuName === 'Galeri') {
                 html += `<div class="galeri-grid">`;
                 filteredData.forEach(item => {
@@ -983,9 +1007,8 @@
                 });
                 html += `</div>`;
             }
-            // Jadwal Kultum dan Kehadiran diasumsikan sama seperti implementasi sebelumnya
             else {
-                html += `<div class="empty-state">Tampilan untuk ${menuName} tersedia di versi penuh.</div>`;
+                html += `<div class="empty-state">Tampilan untuk ${menuName} belum tersedia.</div>`;
             }
 
             container.innerHTML = html;
@@ -1109,10 +1132,31 @@
             } else if (menu === 'Data Mahasiswa') {
                 data.nama = document.getElementById('mhs-nama').value.trim();
                 data.prodi = document.getElementById('mhs-prodi').value.trim();
+                data.noHp = document.getElementById('mhs-nohp').value.trim();
                 data.noKamar = document.getElementById('mhs-kamar').value.trim();
                 if(!data.nama) return showAlert('Nama wajib diisi');
+            } else if (menu === 'Daftar Piket') {
+                data.hari = document.getElementById('pkt-hari').value;
+                data.nama = document.getElementById('pkt-nama').value.trim();
+                if(!data.nama) return showAlert('Nama piket wajib diisi!');
+            } else if (menu === 'Jadwal Kultum') {
+                data.tanggal = document.getElementById('klt-tanggal').value;
+                data.nama = document.getElementById('klt-nama').value.trim();
+                data.tema = document.getElementById('klt-tema').value.trim();
+                if(!data.nama || !data.tanggal) return showAlert('Tanggal dan Nama penceramah wajib diisi!');
+            } else if (menu === 'Laporan Kehadiran') {
+                data.nama = document.getElementById('khd-nama').value.trim();
+                data.prodi = document.getElementById('khd-prodi').value.trim();
+                data.bulan = document.getElementById('khd-bulan').value;
+                data.sakit = document.getElementById('khd-subuh-sakit').value || "0";
+                data.izin = document.getElementById('khd-subuh-izin').value || "0";
+                data.alfa = document.getElementById('khd-subuh-alfa').value || "0";
+                if(!data.nama) return showAlert('Nama wajib diisi!');
+            } else if (menu === 'Galeri') {
+                data.title = document.getElementById('gal-judul').value.trim();
+                data.url = document.getElementById('gal-url').value.trim();
+                if(!data.url) return showAlert('URL Gambar wajib diisi!');
             }
-            // ... (logika kategori lain bisa ditambahkan menyesuaikan input)
 
             try {
                 const contentRef = collection(db, 'artifacts', appId, 'public', 'data', 'asrama_content');
@@ -1122,7 +1166,11 @@
                 // Reset form
                 const activeForm = document.getElementById('form-' + menu);
                 if(activeForm) {
-                    activeForm.querySelectorAll('input, textarea').forEach(el => el.value = '');
+                    activeForm.querySelectorAll('input, textarea').forEach(el => {
+                        if(el.type !== 'number' && el.tagName !== 'SELECT') {
+                            el.value = '';
+                        }
+                    });
                 }
             } catch (error) { console.error(error); showAlert('Gagal menyimpan.'); }
         };
